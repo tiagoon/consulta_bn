@@ -7,7 +7,6 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   const options = {
-    // uri: 'http://acervo.bn.gov.br/sophia_web/acervo/detalhe/931046?guid=1643035963641&returnUrl=%2fsophia_web%2fresultado%2flistar%3fguid%3d1643035963641%26quantidadePaginas%3d1%26codigoRegistro%3d931046%23931046&i=1',
     uri: req.query.q,
     transform: function (body) {
       return cheerio.load(body)
