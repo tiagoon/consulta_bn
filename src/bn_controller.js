@@ -32,6 +32,8 @@ router.get('/', async (req, res) => {
     book.description      = $('.descricaoFisica').text();
     book.dewey_centesimal = $('.classifDewey').text().substr(0,3);
     book.dewey            = $('.classifDewey').text().substr(0,1) + '00';
+    book.bn_id            = req.query.bn_id;
+    book.user_id          = req.headers.user_id;
     
     return res.send(book);
 
