@@ -2,7 +2,8 @@ import express from 'express';
 import { writeFile } from 'fs/promises';
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
+import { title } from 'process';
 
 puppeteer.use(StealthPlugin());
 const router = express.Router();
@@ -33,6 +34,7 @@ router.get('/', async (req, res) => {
     const $ = cheerio.load(html);
 
     const book = {
+      title: $('h1.titulo[itemprop="name"]').text().trim(),
       material: $('p[itemprop="genre"]').text().trim(),
       language: $('p[itemprop="inLanguage"]').text().trim(),
       isbn_code: $('p[itemprop="isbn"]').text().trim(),
