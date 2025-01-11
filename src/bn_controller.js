@@ -3,7 +3,6 @@ import { writeFile } from 'fs/promises';
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import * as cheerio from 'cheerio';
-import { title } from 'process';
 
 puppeteer.use(StealthPlugin());
 const router = express.Router();
@@ -33,8 +32,17 @@ router.get('/', async (req, res) => {
 
     const $ = cheerio.load(html);
 
+    /* Formato geral da URL: http://127.0.0.1:3000/url?q=https://acervo.bn.gov.br/Sophia_web/acervo/detalhe/{bn_id}
+     * Onde 127.0.0.1:3000 é a URL do servidor onde a API está rodando, nesse caso, o equivalente ao localhost
+     * e 3000 e {bn_id} é o ID do livro na BN. Para obter o ID do livro, basta acessar a URL do livro na BN
+     * e copiar o número que vem depois de "acervo/detalhe/".
+     *
+     * Exemplo: https://acervo.bn.gov.br/Sophia_web/acervo/detalhe/1739805
+     * Onde 1739805 é o ID do livro.
+     */
+
     const book = {
-      title: $('h1.titulo[itemprop="name"]').text().trim(),
+      title: $('h1.titulo[itemprop="name"]').first().text().trim(),
       material: $('p[itemprop="genre"]').text().trim(),
       language: $('p[itemprop="inLanguage"]').text().trim(),
       isbn_code: $('p[itemprop="isbn"]').text().trim(),
